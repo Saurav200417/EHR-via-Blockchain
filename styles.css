@@ -28,14 +28,14 @@ h2 {
 
 input, button {
     width: 90%;
-    padding: 15px;
+    padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
 }
 
 button {
     background-color: #35424a;
-    color: White;
+    color: white;
     border: none;
     cursor: pointer;
 }
