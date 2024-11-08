@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="styles.css">
     <title>Background Image</title>
 </head>
-<body background ="photo1.jpg">
+ body {
+            background-image: url("photo1.jpg");
+            background-size: cover;  /* Ensures the image covers the entire page */
+            background-repeat: no-repeat; /* Prevents repeating the image */
+            background-attachment: fixed; /* Keeps the image fixed when scrolling */
+        }
 
 <div class="popup hidden" id="success-popup">
     <p id="popup-message"></p>
