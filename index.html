@@ -8,6 +8,7 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <!-- Login Container -->
     <div class="container" id="login-container">
         <h2>Login</h2>
         <div class="input-group">
@@ -22,26 +23,23 @@
         <p id="login-message"></p>
     </div>
 
+    <!-- Admin Container -->
     <div class="container hidden" id="admin-container">
         <button class="btn logout-btn" onclick="logout()">Logout</button>
         <form id="patient-form">
             <h3><i class="fas fa-user-plus"></i> Add Patient</h3>
-            
             <div class="form-group">
                 <label for="patient-id">Patient ID</label>
                 <input type="text" id="patient-id" placeholder="Patient ID" required>
             </div>
-            
             <div class="form-group">
                 <label for="patient-name">Patient Name</label>
                 <input type="text" id="patient-name" placeholder="Patient Name" required>
             </div>
-            
             <div class="form-group">
                 <label for="patient-age">Age</label>
                 <input type="number" id="patient-age" placeholder="Age" required>
             </div>
-            
             <div class="form-group">
                 <label for="patient-gender">Gender</label>
                 <select id="patient-gender" required>
@@ -51,59 +49,36 @@
                     <option value="Other">Other</option>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label for="patient-diagnosis">Diagnosis</label>
                 <input type="text" id="patient-diagnosis" placeholder="Diagnosis" required>
             </div>
-            
             <div class="form-group">
                 <label for="patient-medication">Medication</label>
                 <input type="text" id="patient-medication" placeholder="Medication" required>
             </div>
-
             <div class="form-group">
                 <label for="admission-date">Admission Date</label>
                 <input type="date" id="admission-date" required>
             </div>
-
             <div class="form-group">
                 <label for="discharge-date">Discharge Date</label>
                 <input type="date" id="discharge-date" required>
             </div>
-            
             <div class="form-group">
                 <label for="hospital">Hospital Name</label>
                 <input type="text" id="hospital" placeholder="Hospital Name" required>
             </div>
-
             <div class="form-group file-input-group">
-                <label for="patient-pdf">
-                    <i class="fas fa-file-pdf"></i> Upload PDF
-                </label>
+                <label for="patient-pdf"><i class="fas fa-file-pdf"></i> Upload PDF</label>
                 <input type="file" id="patient-pdf" accept="application/pdf">
             </div>
-
             <button class="btn" type="submit"><i class="fas fa-plus"></i> Add Patient</button>
         </form>
-
         <button class="btn" onclick="showFileCIDTable()">View File CID Table</button>
-
-        <!-- Main page - index.html -->
-        <div class="container" id="admin-container">
-            <button class="btn logout-btn" onclick="logout()">Logout</button>
-    
-                    <form id="patient-form">
-        <!-- Your form inputs here -->
-                        <button class="btn" type="submit"><i class="fas fa-plus"></i> Add Patient</button>
-                     </form>
-    
-    <!-- Replace patient table with the "View All Files" button -->
-                    <button class="btn" onclick="window.location.href='view-files.html'">View All Files</button>
-            </div>
-
     </div>
 
+    <!-- File CID Table Container -->
     <div class="container hidden" id="file-cid-container">
         <button class="btn logout-btn" onclick="hideFileCIDTable()">Back to Admin</button>
         <h3>File CID Table</h3>
