@@ -4,28 +4,33 @@ const uploadedFiles = [
     { fileName: "LabResults.pdf", fileCID: "QmX...2" },
     { fileName: "MedicalHistory.pdf", fileCID: "QmX...3" }
 ];
+// view-files.js
+const patients = JSON.parse(localStorage.getItem("patients")) || [];
 
-// Function to display the uploaded files in the file list
-function displayFiles() {
-    const fileList = document.getElementById("file-list");
+function displayPatients() {
+    const tbody = document.getElementById("patient-table").querySelector("tbody");
+    tbody.innerHTML = "";
 
-    // Check if there are any uploaded files
-    if (uploadedFiles.length === 0) {
-        fileList.innerHTML = "<p>No files uploaded yet.</p>";
-        return;
-    }
-
-    // Create a list of uploaded files
-    uploadedFiles.forEach(file => {
-        const fileItem = document.createElement("div");
-        fileItem.className = "file-item";
-        fileItem.innerHTML = `
-            <p><strong>File Name:</strong> ${file.fileName}</p>
-            <p><strong>File CID:</strong> ${file.fileCID}</p>
+    patients.forEach((patient) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${patient.id}</td>
+            <td>${patient.name}</td>
+            <td>${patient.age}</td>
+            <td>${patient.gender}</td>
+            <td>${patient.diagnosis}</td>
+            <td>${patient.medication}</td>
+            <td>${patient.admissionDate}</td>
+            <td>${patient.dischargeDate}</td>
+            <td>${patient.hospital}</td>
+            <td>${patient.pdf ? `<a href="${patient.pdf}" target="_blank">View PDF</a>` : "No PDF"}</td>
         `;
-        fileList.appendChild(fileItem);
+        tbody.appendChild(row);
     });
 }
+
+displayPatients();
+
 
 // Go back to the previous page
 function goBack() {
