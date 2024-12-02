@@ -1,6 +1,6 @@
 // Initial data for users and patients
 const users = [
-    { username: "admin", password: "admin", role: "admin" },
+    { username: "admin", password: "a", role: "admin" },
     { username: "user1", password: "1", role: "user" }
 ];
 
