@@ -1,89 +1,206 @@
 const users = [
-    { username: "user1", password: "p" },
-    { username: "user2", password: "p" },
-    { username: "admin", password: "a" }
+    { username: "admin", password: "admin", role: "admin" },
 ];
 
-const uploadedFiles = []; // Array to hold uploaded files
+let patients = [];
 
 function showPopup(message) {
     const popup = document.getElementById("success-popup");
-    const popupMessage = document.getElementById("popup-message");
-    popupMessage.textContent = message;
+    popup.textContent = message;
     popup.classList.remove("hidden");
-
-    setTimeout(() => {
-        popup.classList.add("hidden");
-    }, 2000);
+    setTimeout(() => popup.classList.add("hidden"), 2000);
 }
 
 function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const user = users.find(user => user.username === username && user.password === password);
-    const loginMessage = document.getElementById("login-message");
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const user = users.find(u => u.username === username && u.password === password);
 
     if (user) {
         showPopup("Login Successful!");
-        loginMessage.textContent = "";
-
-        if (user.username === "admin") {
-            document.getElementById("admin-container").classList.remove("hidden");
-        } else {
-            document.getElementById("user-container").classList.remove("hidden");
-        }
         document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("admin-container").classList.remove("hidden");
+        displayPatients();
     } else {
-        loginMessage.textContent = "Invalid username or password.";
-        loginMessage.style.color = "red";
+        document.getElementById("login-message").textContent = "Invalid username or password.";
     }
 }
 
 function logout() {
     document.getElementById("login-container").classList.remove("hidden");
     document.getElementById("admin-container").classList.add("hidden");
-    document.getElementById("user-container").classList.add("hidden");
+    document.getElementById("file-cid-container").classList.add("hidden");
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
-    document.getElementById("login-message").textContent = "";
+    showPopup("Logged out successfully!");
 }
 
-document.getElementById("upload-form-admin").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const fileName = document.getElementById("file-name-admin").value;
-    const cid = document.getElementById("file-cid-admin").value;
+document.getElementById("patient-form").addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    uploadedFiles.push({ fileName, cid });
-    showPopup(`File "${fileName}" uploaded successfully!`);
-    event.target.reset();
+    const pdfInput = document.getElementById("patient-pdf");
+    const pdfFile = pdfInput.files[0];
+
+    const newPatient = {
+        id: document.getElementById("patient-id").value.trim(),
+        name: document.getElementById("patient-name").value.trim(),
+        age: parseInt(document.getElementById("patient-age").value),
+        gender: document.getElementById("patient-gender").value,
+        diagnosis: document.getElementById("patient-diagnosis").value.trim(),
+        medication: document.getElementById("patient-medication").value.trim(),
+        admissionDate: document.getElementById("admission-date").value,
+        dischargeDate: document.getElementById("discharge-date").value,
+        hospital: document.getElementById("hospital").value.trim(),
+        pdf: pdfFile ? URL.createObjectURL(pdfFile) : null,
+    };
+
+    patients.push(newPatient);
+    displayPatients();
+    displayFileCIDTable();
+    e.target.reset();
+    showPopup("Patient added successfully!");
 });
 
-document.getElementById("upload-form-user").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const fileName = document.getElementById("file-name-user").value;
-    const cid = document.getElementById("file-cid-user").value;
+const users = [
+    { username: "admin", password: "admin", role: "admin" },
+];
 
-    uploadedFiles.push({ fileName, cid });
-    showPopup(`File "${fileName}" uploaded successfully!`);
-    event.target.reset();
+let patients = [];
+
+function showPopup(message) {
+    const popup = document.getElementById("success-popup");
+    popup.textContent = message;
+    popup.classList.remove("hidden");
+    setTimeout(() => popup.classList.add("hidden"), 2000);
+}
+
+function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
+        showPopup("Login Successful!");
+        document.getElementById("login-container").classList.add("hidden");
+        document.getElementById("admin-container").classList.remove("hidden");
+        displayPatients();
+    } else {
+        document.getElementById("login-message").textContent = "Invalid username or password.";
+    }
+}
+
+function logout() {
+    document.getElementById("login-container").classList.remove("hidden");
+    document.getElementById("admin-container").classList.add("hidden");
+    document.getElementById("file-cid-container").classList.add("hidden");
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    showPopup("Logged out successfully!");
+}
+
+document.getElementById("patient-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const pdfInput = document.getElementById("patient-pdf");
+    const pdfFile = pdfInput.files[0];
+
+    const newPatient = {
+        id: document.getElementById("patient-id").value.trim(),
+        name: document.getElementById("patient-name").value.trim(),
+        age: parseInt(document.getElementById("patient-age").value),
+        gender: document.getElementById("patient-gender").value,
+        diagnosis: document.getElementById("patient-diagnosis").value.trim(),
+        medication: document.getElementById("patient-medication").value.trim(),
+        admissionDate: document.getElementById("admission-date").value,
+        dischargeDate: document.getElementById("discharge-date").value,
+        hospital: document.getElementById("hospital").value.trim(),
+        pdf: pdfFile ? URL.createObjectURL(pdfFile) : null,
+    };
+
+    patients.push(newPatient);
+    displayPatients();
+    displayFileCIDTable();
+    e.target.reset();
+    showPopup("Patient added successfully!");
 });
 
-function populateFilesTable() {
-    const filesList = document.getElementById("files-list");
-    filesList.innerHTML = "";
-    uploadedFiles.forEach(file => {
+function displayPatients() {
+    const tbody = document.getElementById("patient-table").querySelector("tbody");
+    tbody.innerHTML = "";
+
+    patients.forEach((patient, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${file.fileName}</td>
-            <td>${file.cid}</td>
-            <td><button onclick="deleteFile('${file.cid}')">Delete</button></td>
+            <td>${patient.id}</td>
+            <td>${patient.name}</td>
+            <td>${patient.age}</td>
+            <td>${patient.gender}</td>
+            <td>${patient.diagnosis}</td>
+            <td>${patient.medication}</td>
+            <td>${patient.admissionDate}</td>
+            <td>${patient.dischargeDate}</td>
+            <td>${patient.hospital}</td>
+            <td>${patient.pdf ? `<a href="${patient.pdf}" target="_blank">View PDF</a>` : "No PDF"}</td>
+            <td>
+                <button class="btn" onclick="deletePatient(${index})">Delete</button>
+            </td>
         `;
-        filesList.appendChild(row);
+        tbody.appendChild(row);
     });
 }
 
-window.onload = function() {
-    if (document.getElementById("files-list")) {
-        populateFilesTable();
-    }
-};
+function deletePatient(index) {
+    patients.splice(index, 1);
+    displayPatients();
+    displayFileCIDTable();
+    showPopup("Patient record deleted!");
+}
+
+function displayFileCIDTable() {
+    const tbody = document.getElementById("file-cid-table").querySelector("tbody");
+    tbody.innerHTML = "";
+
+    patients.forEach(patient => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${patient.id}</td>
+            <td>${patient.pdf ? `<a href="${patient.pdf}" target="_blank">View File</a>` : "No CID"}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function showFileCIDTable() {
+    document.getElementById("admin-container").classList.add("hidden");
+    document.getElementById("file-cid-container").classList.remove("hidden");
+}
+
+function hideFileCIDTable() {
+    document.getElementById("file-cid-container").classList.add("hidden");
+    document.getElementById("admin-container").classList.remove("hidden");
+}
+
+
+function displayFileCIDTable() {
+    const tbody = document.getElementById("file-cid-table").querySelector("tbody");
+    tbody.innerHTML = "";
+
+    patients.forEach(patient => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${patient.id}</td>
+            <td>${patient.pdf ? `<a href="${patient.pdf}" target="_blank">View File</a>` : "No CID"}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function showFileCIDTable() {
+    document.getElementById("admin-container").classList.add("hidden");
+    document.getElementById("file-cid-container").classList.remove("hidden");
+}
+
+function hideFileCIDTable() {
+    document.getElementById("file-cid-container").classList.add("hidden");
+    document.getElementById("admin-container").classList.remove("hidden");
+}
