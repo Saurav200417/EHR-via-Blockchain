@@ -98,6 +98,7 @@ function logout() {
     showPopup("Logged out successfully!");
 }
 
+// Update this part of index.js to save patients in localStorage
 document.getElementById("patient-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -118,43 +119,17 @@ document.getElementById("patient-form").addEventListener("submit", (e) => {
     };
 
     patients.push(newPatient);
+
+    // Save the updated list of patients to localStorage
+    localStorage.setItem("patients", JSON.stringify(patients));
+
     displayPatients();
     displayFileCIDTable();
     e.target.reset();
     showPopup("Patient added successfully!");
 });
 
-function displayPatients() {
-    const tbody = document.getElementById("patient-table").querySelector("tbody");
-    tbody.innerHTML = "";
 
-    patients.forEach((patient, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${patient.id}</td>
-            <td>${patient.name}</td>
-            <td>${patient.age}</td>
-            <td>${patient.gender}</td>
-            <td>${patient.diagnosis}</td>
-            <td>${patient.medication}</td>
-            <td>${patient.admissionDate}</td>
-            <td>${patient.dischargeDate}</td>
-            <td>${patient.hospital}</td>
-            <td>${patient.pdf ? `<a href="${patient.pdf}" target="_blank">View PDF</a>` : "No PDF"}</td>
-            <td>
-                <button class="btn" onclick="deletePatient(${index})">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-function deletePatient(index) {
-    patients.splice(index, 1);
-    displayPatients();
-    displayFileCIDTable();
-    showPopup("Patient record deleted!");
-}
 
 function displayFileCIDTable() {
     const tbody = document.getElementById("file-cid-table").querySelector("tbody");
