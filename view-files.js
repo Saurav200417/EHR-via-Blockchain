@@ -1,24 +1,21 @@
-// Example data for already uploaded files
-const uploadedFiles = [
-    { fileName: "PatientReport.pdf", fileCID: "QmX...1" },
-    { fileName: "LabResults.pdf", fileCID: "QmX...2" },
-    { fileName: "MedicalHistory.pdf", fileCID: "QmX...3" }
-];
-// view-files.js
-const patients = JSON.parse(localStorage.getItem("patients")) || [];
-// Example data for already uploaded files (can be replaced with real data from a backend or local storage)
+// Example data for already uploaded files (This would be replaced by real data)
 const uploadedFiles = [
     { fileName: "PatientReport.pdf", fileCID: "QmX...1" },
     { fileName: "LabResults.pdf", fileCID: "QmX...2" },
     { fileName: "MedicalHistory.pdf", fileCID: "QmX...3" }
 ];
 
+// Store uploaded files in localStorage if they don't already exist
+if (!localStorage.getItem("uploadedFiles")) {
+    localStorage.setItem("uploadedFiles", JSON.stringify(uploadedFiles));
+}
+
 // Function to display the uploaded files in the table
-function displayFiles() {
+function displayFiles(files) {
     const filesList = document.getElementById("files-list");
     filesList.innerHTML = "";
 
-    uploadedFiles.forEach((file) => {
+    files.forEach((file) => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${file.fileName}</td>
@@ -28,6 +25,19 @@ function displayFiles() {
         filesList.appendChild(row);
     });
 }
+
+// Function to view all files from localStorage
+function viewAllFiles() {
+    const files = JSON.parse(localStorage.getItem("uploadedFiles"));
+    displayFiles(files);
+}
+
+// Call the display function on page load (if no files exist, display empty table)
+window.onload = () => {
+    const files = JSON.parse(localStorage.getItem("uploadedFiles")) || [];
+    displayFiles(files);
+};
+
 
 // Call the display function on page load
 window.onload = displayFiles;
